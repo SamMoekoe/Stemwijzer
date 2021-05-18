@@ -7,12 +7,15 @@ const statementPara = document.getElementById("statement");
 const opinie = document.getElementById("opinie");
 const optionButtons = document.querySelectorAll(".option");
 const selResult = document.getElementById("parties");
+const endResult = document.getElementById("results");
 const Field = document.getElementById("parties");
+const back = document.getElementById("button-back");
 var userInput = [];
+var partySelection = [];
 var statementId = 0;
 var select;
 
-/* start van de stemwijzer */
+/* geen uitleg nodig, dit start de stemwijzer */
 
 function start() {
     jumbotron.hidden = true;
@@ -28,18 +31,31 @@ function start() {
 
 /* 
 Elke keer als er op een bepaalde keuze knop wordt geklikt,
-wordt de keuze opgeslagen en gaat hij door naar de volgende statement
+sla de waarde van die knop op
+en ga naar volgende statement
 */
+
+back.onclick = function () {
+    choice = "terug";
+}
 
 function keepProgress(choice) {
     /*
-    keuze opslaan in userInput array
-    en doorgaan naar volgende statement
-    display actuele statement ID
+    choice opslaan in userInput array
+    en doorgaan naar volgende stmt
+    display actuele stmt ID
+    "terug" knop om naar de vorige stelling te gaan
      */
+
     if (choice != "terug") {
         userInput[currentSubject] = choice;
         currentSubject++;
+    } else {
+        currentSubject--;
+    }
+
+    if (currentSubject.length = 1) {
+        back.hidden = false;
     }
 
     if (currentSubject >= subjects.length) {
@@ -50,7 +66,6 @@ function keepProgress(choice) {
     opinie.innerText = subjects[currentSubject].statement;
     console.log(userInput);
 }
-
 function generateCheckboxList(givenArray, givenField) {
     /*
     display partij namen
@@ -62,12 +77,7 @@ function generateCheckboxList(givenArray, givenField) {
 
     var checkboxes = "";
     var classLabel = "";
-
-    if (givenArray == subjects) {
-        checkboxes = "statementCheckbox";
-        classLabel = "statementLabel";
-    }
-
+    
     if (givenArray == parties) {
         checkboxes = "partyCheckbox";
         classLabel = "partyLabel";
@@ -77,13 +87,10 @@ function generateCheckboxList(givenArray, givenField) {
     givenArray.forEach(object => {
         var newCheckbox = document.createElement("input");
         newCheckbox.type = "checkbox";
+        newCheckbox.setAttribute("name", parties[loopCount].name);
         newCheckbox.value = loopCount;
-        if (givenArray == parties) {
-            newCheckbox.dataset.secular = parties[loopCount].secular;
-            newCheckbox.dataset.partysize = parties[loopCount].size;
-        }
 
-        newCheckbox.setAttribute("class", 'mr-2 ml-1 ${checkboxes}');
+        newCheckbox.classList.add('mr-2', 'ml-1', `${checkboxes}`);
         var newLabel = document.createElement("label");
         if (object.title != null) {
             newLabel.innerHTML = object.title;
@@ -109,29 +116,62 @@ function generateCheckboxList(givenArray, givenField) {
         var btnSecular = document.createElement("button");
         var partyCheckboxes = document.querySelectorAll(".partyCheckbox");
 
-        btnSecular = select.setAttribute("class", "btn btn-primary");
+        btnSecular.setAttribute("class", "btn btn-primary");
         btnSecular.innerHTML = "Seculiere partijen";
-        btnSecular.onclick = function () {
+        btnSecular.addEventListener("click", function () {
             partyCheckboxes.forEach(element => {
-                if (element.dataset.secular == "true") {
-                    element.checked = true;
-                }
-            });
-        }
+                element.checked = false;
+                var name = element.getAttribute("name");
+                parties.forEach(party => {
+                    if (party.secular == true) {
+                        if (party.name == name) {
+                            element.checked = true;
+                            partySelection.push(name);
+                            partySelection.name++
+                        }
+                    }
+                });
+            })
+        });
 
         var btnSize = document.createElement("button");
         var partyCheckboxes = document.querySelectorAll(".partyCheckbox");
         btnSize.setAttribute("class", "btn btn-primary");
         btnSize.innerHTML = "Selecteer alle grote partijen";
-        btnSize.onclick = function () {
+        btnSize.addEventListener("click", function () {
             partyCheckboxes.forEach(element => {
-                if (element.dataset.partysize != "0") {
-                    element.checked = true;
-                }
+                var name = element.getAttribute("name");
+                element.checked = false;
+                parties.forEach(party => {
+                    if (party.size > 0) {
+                        if (party.name == name) {
+                            element.checked = true;
+                            partySelection.push(name);
+                            partySelection.name++
+                        }
+                    }
+                });
             });
-        }
+        });
+
+        var btnEnd = document.createElement("button");
+        btnEnd.setAttribute("class", "btn btn-primary");
+        btnEnd.innerHTML = "naar eind-resultaat";
+        btnEnd.addEventListener("click", function () {
+            calculateResults();
+        });
 
         givenField.append(btnSize);
         givenField.append(btnSecular);
+        givenField.append(btnEnd);
     }
+}
+
+function calculateResults() {
+    /*
+    toon  partij/partijen die het meest overeenkomt(komen) met jouw opinie
+    */
+    selResult.hidden = true;
+    endResult.hidden = false;
+    return
 }
