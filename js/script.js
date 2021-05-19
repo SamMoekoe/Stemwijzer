@@ -11,9 +11,23 @@ const endResult = document.getElementById("results");
 const Field = document.getElementById("parties");
 const back = document.getElementById("button-back");
 var userInput = [];
-var partySelection = [];
 var statementId = 0;
 var select;
+var partySelection = [
+    {Name: 'Adelle', Total: 0},
+    {Name: 'Anneliek', Total: 0},
+    {Name: 'Bert', Total: 0},
+    {Name: 'Dilan', Total: 0},
+    {Name: 'Elisa', Total: 0},
+    {Name: 'Elsa', Total: 0},
+    {Name: 'Geraldine', Total: 0},
+    {Name: 'Gert', Total: 0},
+    {Name: 'Iona', Total: 0},
+    {Name: 'Jackp', Total: 0},
+    {Name: 'Karam', Total: 0},
+    {Name: 'Kayleigh', Total: 0},
+    {Name: 'Sarah-Louise', Total: 0}
+];
 
 /* geen uitleg nodig, dit start de stemwijzer */
 
@@ -127,7 +141,6 @@ function generateCheckboxList(givenArray, givenField) {
                         if (party.name == name) {
                             element.checked = true;
                             partySelection.push(name);
-                            partySelection.name++
                         }
                     }
                 });
@@ -147,7 +160,6 @@ function generateCheckboxList(givenArray, givenField) {
                         if (party.name == name) {
                             element.checked = true;
                             partySelection.push(name);
-                            partySelection.name++
                         }
                     }
                 });
@@ -173,5 +185,6 @@ function calculateResults() {
     */
     selResult.hidden = true;
     endResult.hidden = false;
+    
     return
 }
