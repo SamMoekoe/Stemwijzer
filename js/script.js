@@ -149,6 +149,7 @@ function generateCheckboxList(givenArray, givenField) {
                     if (party.size > 0) {
                         if (party.name == name) {
                             element.checked = true;
+                            
                         }
                     }
                 });
@@ -174,6 +175,5 @@ function calculateResults() {
     */
     selResult.hidden = true;
     endResult.hidden = false;
-    
     return
 }
